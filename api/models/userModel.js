@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../../config/dbConfig'); // Adjust the path as necessary
+const { sequelize } = require('../../config/dbConfig'); // Import sequelize from dbConfig
 
 class User extends Model {}
 
@@ -21,7 +21,7 @@ User.init({
     updated_at: DataTypes.DATE,
     last_login_at: DataTypes.DATE
 }, {
-    sequelize,
+    sequelize, // Pass the Sequelize instance here
     modelName: 'User',
     timestamps: false,
     tableName: 'users'

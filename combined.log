@@ -23,3 +23,30 @@
 {"level":"info","message":"POST /biometrics/add"}
 {"level":"info","message":"POST /biometrics/add"}
 {"level":"info","message":"POST /add"}
+{"level":"info","message":"Server running on port 3001"}
+{"level":"error","message":"Unable to connect to the database: sequelize.authenticate is not a function","stack":"TypeError: sequelize.authenticate is not a function\n    at Server.<anonymous> (D:\\Work\\Coding\\SIH\\app.js:44:25)\n    at Object.onceWrapper (node:events:627:28)\n    at Server.emit (node:events:513:28)\n    at emitListeningNT (node:net:1497:10)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)"}
+{"level":"info","message":"Server running on port 3001"}
+{"level":"error","message":"Unable to connect to the database: connect ETIMEDOUT 172.31.0.0:5432","name":"SequelizeConnectionError","original":{"address":"172.31.0.0","code":"ETIMEDOUT","errno":-4039,"port":5432,"syscall":"connect"},"parent":{"address":"172.31.0.0","code":"ETIMEDOUT","errno":-4039,"port":5432,"syscall":"connect"},"stack":"SequelizeConnectionError: connect ETIMEDOUT 172.31.0.0:5432\n    at Client._connectionCallback (D:\\Work\\Coding\\SIH\\node_modules\\sequelize\\lib\\dialects\\postgres\\connection-manager.js:143:24)\n    at Client._handleErrorWhileConnecting (D:\\Work\\Coding\\SIH\\node_modules\\pg\\lib\\client.js:327:19)\n    at Client._handleErrorEvent (D:\\Work\\Coding\\SIH\\node_modules\\pg\\lib\\client.js:337:19)\n    at Connection.emit (node:events:513:28)\n    at Socket.reportStreamError (D:\\Work\\Coding\\SIH\\node_modules\\pg\\lib\\connection.js:58:12)\n    at Socket.emit (node:events:513:28)\n    at emitErrorNT (node:internal/streams/destroy:157:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:122:3)\n    at processTicksAndRejections (node:internal/process/task_queues:83:21)"}
+{"level":"info","message":"GET /"}
+{"level":"info","message":"GET /"}
+{"level":"info","message":"GET /"}
+{"level":"info","message":"Server running on port 3001"}
+{"level":"info","message":"Database connected successfully."}
+{"level":"info","message":"GET /"}
+{"level":"info","message":"GET /"}
+{"level":"info","message":"GET /"}
+{"level":"info","message":"Server running on port 3001"}
+{"level":"info","message":"Database connected successfully."}
+{"level":"info","message":"POST /doctors"}
+{"level":"info","message":"POST /doctors"}
+{"level":"info","message":"POST /doctor"}
+{"level":"info","message":"POST /doctor"}
+{"level":"info","message":"POST /api/doctors/doctor"}
+{"level":"info","message":"POST /api/doctors/doctor"}
+{"level":"info","message":"POST /api/doctors/adddoctor"}
+{"level":"info","message":"POST /api/doctors/adddoctor"}
+{"level":"info","message":"POST /api/doctors/adddoctor/"}
+{"level":"info","message":"POST /api/doctors/"}
+{"level":"info","message":"POST /api/doctors/"}
+{"level":"info","message":"POST /api/doctors/"}
+{"level":"info","message":"POST /api/doctors/"}

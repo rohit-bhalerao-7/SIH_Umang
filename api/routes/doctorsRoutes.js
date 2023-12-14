@@ -3,7 +3,7 @@ const router = express.Router();
 const doctorsController = require('../controllers/doctorsController');
 
 // Add a doctor
-router.post('/doctors', doctorsController.addDoctor);
+router.post('/', doctorsController.addDoctor);
 
 // Update doctor information
 router.put('/doctors/:doctor_id', doctorsController.updateDoctorInformation);

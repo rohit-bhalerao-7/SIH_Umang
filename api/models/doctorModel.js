@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../../config/dbConfig'); // Adjust the path as necessary
+const {sequelize} = require('../../config/dbConfig'); // Adjust the path as necessary
 
 class Doctor extends Model {}
 
@@ -12,7 +12,7 @@ Doctor.init({
     name: DataTypes.STRING,
     specialization: DataTypes.STRING,
     availability: DataTypes.STRING,
-    eSanjeevani_id: DataTypes.STRING,
+    //eSanjeevani_id: DataTypes.STRING,
     contact_info: DataTypes.STRING,
     qualification: DataTypes.STRING,
     created_at: DataTypes.DATE,

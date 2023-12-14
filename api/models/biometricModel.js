@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../../config/dbConfig'); // Adjust the path as necessary
+const {sequelize} = require('../../config/dbConfig'); // Adjust the path as necessary
 
 class Biometric extends Model {}
 

@@ -12,7 +12,7 @@ const prescriptionsRoutes = require('./api/routes/prescriptionsRoutes');
 const doctorsRoutes = require('./api/routes/doctorsRoutes');
 
 // Database connection setup (Replace with your DB configuration)
-const sequelize = require('./config/dbConfig');
+const { sequelize } = require('./config/dbConfig'); // Change this line
 
 // Middleware for parsing JSON bodies
 app.use(express.json());
@@ -37,15 +37,23 @@ app.use('/api/doctors', doctorsRoutes);
 app.use(errorHandler);
 
 // Start the server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, async () => {
     logger.info(`Server running on port ${PORT}`);
     try {
-        await sequelize.authenticate();
+        await sequelize.authenticate(); // Use sequelize instead of sequelize.sequelize
         logger.info('Database connected successfully.');
     } catch (error) {
         logger.error('Unable to connect to the database:', error);
     }
 });
+
+sequelize.sync()
+   .then(() => {
+      console.log('Database tables synchronized successfully.');
+   })
+   .catch(err => {
+      console.error('Error synchronizing database tables:', err);
+   });
 
 module.exports = app;
