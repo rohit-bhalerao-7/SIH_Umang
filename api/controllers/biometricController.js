@@ -1,18 +1,25 @@
-const BiometricModel = require('../models/biometricModel');
+// const BiometricModel = require('../models/biometricModel');
 
-const addBiometricData = async (req, res) => {
-    // Extract biometric data from request body
-    const { user_id, fingerprint_data, retina_scan_data } = req.body;
-    // Save biometric data to database
-    const biometricData = await BiometricModel.create({ user_id, fingerprint_data, retina_scan_data });
-    res.status(201).json({ message: "Biometric data added", biometricData });
-};
 
-const getBiometricData = async (req, res) => {
-    // Retrieve biometric data for a user
-    const { user_id } = req.params;
-    const biometricData = await BiometricModel.findOne({ user_id });
-    res.json({ biometricData });
-};
+// const biometricService = require('../../services/biometricService');
 
-module.exports = { addBiometricData, getBiometricData };
+// const loginWithBiometrics = async (req, res) => {
+//     try {
+//         const { fingerprintData } = req.body; // or however you receive the biometric data
+//         const user = await biometricService.verifyUser(fingerprintData);
+
+//         if (user) {
+//             // The user is authenticated
+//             // Generate a token or a session
+//             res.status(200).json({ message: "User authenticated successfully", user });
+//         } else {
+//             res.status(401).json({ message: "Authentication failed" });
+//         }
+//     } catch (error) {
+//         res.status(500).json({ message: "An error occurred during authentication", error: error.message });
+//     }
+// };
+
+// module.exports = {
+//     loginWithBiometrics
+// };

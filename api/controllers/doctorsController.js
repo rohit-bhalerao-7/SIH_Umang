@@ -1,4 +1,5 @@
 const Doctor = require('../models/doctorModel'); // Sequelize model for Doctor
+const mockDoctors = require('../../data/mockdoctors');
 
 const addDoctor = async (req, res) => {
     try {
@@ -40,4 +41,8 @@ const getDoctorDetails = async (req, res) => {
     }
 };
 
-module.exports = { addDoctor, updateDoctorInformation, getDoctorDetails };
+const getDoctorsBySpecialization = (specialization) => {
+    return mockDoctors.filter(doctor => doctor.specialization === specialization);
+  };
+
+module.exports = { addDoctor, updateDoctorInformation, getDoctorDetails, getDoctorsBySpecialization };

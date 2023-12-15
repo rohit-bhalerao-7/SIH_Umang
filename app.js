@@ -3,7 +3,9 @@ const app = express();
 const logger = require('./utils/logger');
 const errorHandler = require('./utils/errorHandler');
 const responseFormatter = require('./utils/responseFormatter');
-
+const authMiddleware = require('./middlewares/authMiddleware');
+const loggerMiddleware = require('./middlewares/loggerMiddleware');
+const usersController = require('./api/controllers/usersController')
 // Import routes
 const usersRoutes = require('./api/routes/usersRoutes');
 const biometricRoutes = require('./api/routes/biometricRoutes');
@@ -17,6 +19,7 @@ const { sequelize } = require('./config/dbConfig'); // Change this line
 // Middleware for parsing JSON bodies
 app.use(express.json());
 
+app.use(loggerMiddleware);
 // Middleware for logging requests
 app.use((req, res, next) => {
     logger.info(`${req.method} ${req.path}`);
@@ -25,10 +28,13 @@ app.use((req, res, next) => {
 
 // Middleware for response formatting
 app.use(responseFormatter);
+// Use authMiddleware on routes that require authentication
+app.put('/api/users/:userId', authMiddleware, usersController.updateUserProfile);
+
 
 // Define routes
 app.use('/api/users', usersRoutes);
-app.use('/api/biometric', biometricRoutes);
+//app.use('/api/biometric', biometricRoutes);
 app.use('/api/consultations', consultationsRoutes);
 app.use('/api/prescriptions', prescriptionsRoutes);
 app.use('/api/doctors', doctorsRoutes);

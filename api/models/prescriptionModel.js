@@ -15,8 +15,8 @@ Prescription.init({
     instructions: DataTypes.TEXT,
     created_at: DataTypes.DATE,
     updated_at: DataTypes.DATE,
-    patient_id: DataTypes.INTEGER, // Add patient_id field
-    name: DataTypes.STRING // Add name field
+    // patient_id: DataTypes.INTEGER, // Add patient_id field
+    // name: DataTypes.STRING // Add name field
 }, {
     sequelize,
     modelName: 'Prescription',
