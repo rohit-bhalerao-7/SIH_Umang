@@ -1,25 +1,20 @@
-// const BiometricModel = require('../models/biometricModel');
+const { createUserSession } = require('../services/authService');
 
+const biometricLogin = async (req, res) => {
+    try {
+        const { fingerprintData } = req.body;
+        const sessionCreated = await createUserSession(fingerprintData, req.session);
 
-// const biometricService = require('../../services/biometricService');
+        if (sessionCreated) {
+            res.status(200).json({ message: "Biometric authentication successful" });
+        } else {
+            res.status(401).json({ message: "Biometric authentication failed" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "An error occurred during biometric authentication", error: error.message });
+    }
+};
 
-// const loginWithBiometrics = async (req, res) => {
-//     try {
-//         const { fingerprintData } = req.body; // or however you receive the biometric data
-//         const user = await biometricService.verifyUser(fingerprintData);
-
-//         if (user) {
-//             // The user is authenticated
-//             // Generate a token or a session
-//             res.status(200).json({ message: "User authenticated successfully", user });
-//         } else {
-//             res.status(401).json({ message: "Authentication failed" });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ message: "An error occurred during authentication", error: error.message });
-//     }
-// };
-
-// module.exports = {
-//     loginWithBiometrics
-// };
+module.exports = {
+    biometricLogin
+};

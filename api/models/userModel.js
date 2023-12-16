@@ -1,41 +1,36 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../config/dbConfig'); // Import sequelize from dbConfig
+const shortid = require('shortid'); // You can use a package like 'shortid' to generate unique IDs
 
 class User extends Model {}
 
-User.init(
-  {
+User.init({
     user_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    patient_id: {
+        type: DataTypes.STRING, // Use STRING data type for the patient ID
+        unique: true, // Ensure it's unique
+        defaultValue: shortid.generate(), // Generate a unique ID when a new user is created
     },
     name: DataTypes.STRING,
     email: {
-      type: DataTypes.STRING,
-      unique: true,
+        type: DataTypes.STRING,
+        unique: true
     },
     password_hash: DataTypes.STRING,
-    biometric_data: DataTypes.INTEGER, // This should be a reference to the Biometric data table
+    biometric_data: DataTypes.INTEGER,
     language_preference: DataTypes.STRING,
-    created_at: { // Define "created_at" column
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'), // Use PostgreSQL's current timestamp
-    },
-    updated_at: { // Define "updated_at" column
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'), // Use PostgreSQL's current timestamp
-    },
-    last_login_at: DataTypes.DATE, // Assuming "last_login_at" is a custom column
-  },
-  {
-    sequelize, // Pass the Sequelize instance here
+    created_at: DataTypes.DATE,
+    updated_at: DataTypes.DATE,
+    last_login_at: DataTypes.DATE
+}, {
+    sequelize,
     modelName: 'User',
-    timestamps: false, // Disable Sequelize's automatic timestamps
-    tableName: 'users',
-  }
-);
+    timestamps: false,
+    tableName: 'users'
+});
 
 module.exports = User;

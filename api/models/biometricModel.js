@@ -1,25 +1,41 @@
 const { Model, DataTypes } = require('sequelize');
-const {sequelize} = require('../../config/dbConfig'); // Adjust the path as necessary
+const { sequelize } = require('../../config/dbConfig'); // Import sequelize from dbConfig
+const Biometric = require('./biometricModel'); // Import the Biometric model
 
-class Biometric extends Model {}
+class User extends Model {}
 
-Biometric.init({
-    biometric_id: {
+User.init({
+    user_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
     },
-    user_id: DataTypes.INTEGER, // Foreign key to Users table
-    fingerprint_data: DataTypes.BLOB,
-    retina_scan_data: DataTypes.BLOB,
-    aadhar_number: DataTypes.STRING,
+    name: DataTypes.STRING,
+    email: {
+        type: DataTypes.STRING,
+        unique: true,
+    },
+    password_hash: DataTypes.STRING,
+    language_preference: DataTypes.STRING,
     created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE
+    updated_at: DataTypes.DATE,
+    last_login_at: DataTypes.DATE,
+    biometric_data: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Biometric, // Reference the Biometric model
+            key: 'biometric_id', // Reference the primary key of the Biometric table
+        },
+    },
+    height: DataTypes.INTEGER,
+    weight: DataTypes.INTEGER,
+    age: DataTypes.INTEGER,
+    gender: DataTypes.STRING,
 }, {
-    sequelize,
-    modelName: 'Biometric',
+    sequelize, // Pass the Sequelize instance here
+    modelName: 'User',
     timestamps: false,
-    tableName: 'biometric_data'
+    tableName: 'users',
 });
 
-module.exports = Biometric;
+module.exports = User;

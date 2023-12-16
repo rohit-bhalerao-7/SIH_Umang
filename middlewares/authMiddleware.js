@@ -1,18 +1,18 @@
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const biometricService = require('../services/biometricService');
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
     try {
-        const token = req.headers.authorization.split(' ')[1]; // Assuming token is sent as "Bearer <token>"
-        if (!token) {
-            throw new Error('Authentication token not found');
+        const { fingerprintData } = req.session; // Assuming the fingerprint data is stored in the session
+        const user = await biometricService.verifyUser(fingerprintData);
+
+        if (!user) {
+            return res.status(401).json({ message: "Authentication failed" });
         }
 
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-        req.userData = { userId: decodedToken.userId }; // Add user data to request object
+        req.user = user; // Add user data to request object
         next();
     } catch (error) {
-        res.status(401).json({ message: 'Authentication failed' });
+        res.status(401).json({ message: "Authentication failed", error: error.message });
     }
 };
 
