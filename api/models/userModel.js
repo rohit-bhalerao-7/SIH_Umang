@@ -5,27 +5,42 @@ const shortid = require('shortid'); // You can use a package like 'shortid' to g
 class User extends Model {}
 
 User.init({
-    user_id: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    patient_id: {
-        type: DataTypes.STRING, // Use STRING data type for the patient ID
-        unique: true, // Ensure it's unique
-        defaultValue: shortid.generate(), // Generate a unique ID when a new user is created
+    mobileNumber: {
+        type: DataTypes.STRING(15),
+        allowNull: false,
+        unique: true
     },
     name: DataTypes.STRING,
-    email: {
+    dateOfBirth: DataTypes.DATEONLY,
+    gender: DataTypes.STRING,
+    weight: DataTypes.FLOAT,
+    height: DataTypes.FLOAT,
+    bloodGroup: DataTypes.STRING,
+    abhaId: {
         type: DataTypes.STRING,
         unique: true
     },
-    password_hash: DataTypes.STRING,
-    biometric_data: DataTypes.INTEGER,
+    fingerprintKey: {
+        type: DataTypes.STRING,
+        unique: false,
+        allowNull: true // since it might not be set for all users
+    },
+    otp: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false // since it might not be set for all users
+    },
     language_preference: DataTypes.STRING,
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE,
-    last_login_at: DataTypes.DATE
+    disabilityStatus: {
+        type: DataTypes.ENUM('yes', 'no'),
+        allowNull: true // or false depending on your requirements
+    },
+    // Other fields as necessary
 }, {
     sequelize,
     modelName: 'User',

@@ -1,35 +1,47 @@
 const User = require('../models/userModel'); // Sequelize model for User
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+
+const mockUsers = require('../../data/mockUsers');
+const generateAbhaId = require('../../utils/idGenerator');
+const generateFingerprintKey = require('../../utils/fingerprintKey');
+const otpGenerator = require('../../utils/otpGenerator'); // Service for mock OTP
 
 const registerUser = async (req, res) => {
     try {
         const {
+            mobileNumber,
             name,
-            email,
-            password,
-            biometricData,
-            language_preference,
-            height,
+            dateOfBirth,
+            gender,
             weight,
-            age,
-            gender
+            height,
+            bloodGroup,
+            language_preference,
+            disability_status,
         } = req.body;
 
-        // Hash the password (if needed)
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // Generate a random Abha ID
+        const abhaId = generateAbhaId();
+        
+        // Generate a random fingerprint key
+        const generatedFingerprintKey = generateFingerprintKey();
 
-        // Create a new user with the hashed password and other details
+        // Generate a random OTP
+        const generatedOtp = otpGenerator();
+
+        // Create a new user with the details, including the generated OTP
         const user = await User.create({
+            mobileNumber,
             name,
-            email,
-            password: hashedPassword,
-            biometric_data: biometricData, // Store the biometric data
-            language_preference,
-            height,
+            dateOfBirth,
+            gender,
             weight,
-            age,
-            gender
+            height,
+            bloodGroup,
+            language_preference,
+            disability_status,
+            abhaId,
+            fingerprintKey: generatedFingerprintKey,
+            otp: generatedOtp // Include the generated OTP
         });
 
         res.status(201).json({ message: "User registered successfully", user });
@@ -41,51 +53,97 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
     try {
-        // Assuming you receive biometric data in the request body
-        const { biometricData } = req.body;
+        const { mobileNumber, enteredOtp } = req.body;
 
-        // Find the user by biometric data
-        const user = await User.findOne({ where: { biometric_data: biometricData } });
+        // Find the user by mobile number
+        const user = await User.findOne({ where: { mobileNumber } });
 
         if (!user) {
-            return res.status(401).json({ message: "Invalid biometric data" });
+            return res.status(401).json({ message: "User not found" });
         }
 
-        // If biometric data is valid, generate a JWT token for the user
-        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
+        // Get the OTP stored in the database for the user
+        const storedOtp = user.otp;
 
-        res.json({ message: "Login successful", token });
+        // Validate the entered OTP against the stored OTP
+        if (enteredOtp !== storedOtp) {
+            return res.status(401).json({ message: "Invalid OTP" });
+        }
+
+        // OTP is valid, proceed to login the user
+        res.json({ message: "Login successful", user });
     } catch (error) {
         res.status(500).json({ message: "Error logging in", error: error.message });
     }
 };
 
 
-const updateUserProfile = async (req, res) => {
+const loginUserWithFingerprint = async (req, res) => {
     try {
-        const { userId } = req.params;
-        const updateData = req.body;
+        const { fingerprintKey } = req.body;
 
-        // Check if the updateData contains only 'height' and 'weight' fields
-        const allowedFields = ['height', 'weight'];
-        const isValidUpdate = Object.keys(updateData).every(field => allowedFields.includes(field));
+        // Simulate a fingerprint match by checking the key
+        // In a real scenario, this would be a fingerprint ID or similar identifier
+        const user = await User.findOne({ where: { fingerprintKey } });
 
-        if (!isValidUpdate) {
-            return res.status(400).json({ message: "Invalid fields for update" });
-        }
-
-        const [updated] = await User.update(updateData, { where: { id: userId } });
-
-        if (updated) {
-            const updatedUser = await User.findOne({ where: { id: userId } });
-            res.json({ message: "User profile updated", user: updatedUser });
+        if (user) {
+            // Simulate successful fingerprint authentication
+            // In a real scenario, you might start a session or similar
+            res.json({ message: "Login successful", userProfile: user });
         } else {
-            throw new Error('User not found');
+            res.status(401).json({ message: "Fingerprint authentication failed" });
         }
     } catch (error) {
-        res.status(500).json({ message: "Error updating user", error: error.message });
+        res.status(500).json({ message: "Error during fingerprint login", error: error.message });
+    }
+};
+
+// const updateUserProfile = async (req, res) => {
+//     try {
+//         const { userId } = req.params;
+//         const { height, weight } = req.body;
+
+//         const updateData = { height, weight };
+//         const [updated] = await User.update(updateData, { where: { id: userId } });
+
+//         if (updated) {
+//             const updatedUser = await User.findOne({ where: { id: userId } });
+//             res.json({ message: "User profile updated", user: updatedUser });
+//         } else {
+//             res.status(404).json({ message: "User not found" });
+//         }
+//     } catch (error) {
+//         res.status(500).json({ message: "Error updating user", error: error.message });
+//     }
+// };
+// const addMockUsers = async (req, res) => {
+//     try {
+//       // Loop through the mockUsers array and create user records in the database
+//       for (const userData of mockUsers) {
+//         await User.create(userData);
+//       }
+  
+//       res.status(201).json({ message: "Mock users added successfully" });
+//     } catch (error) {
+//       res.status(500).json({ message: "Error adding mock users", error: error.message });
+//     }
+//   };
+
+const addMockUsers = async (req, res) => {
+    try {
+        const createdUsers = await User.bulkCreate(mockUsers, { validate: true });
+
+        res.status(201).json({ message: "Mock users added successfully", createdUsers });
+    } catch (error) {
+        console.error("Validation error:", error.errors); // Log validation errors
+        res.status(500).json({ message: "Error adding mock users", error: error.message });
     }
 };
 
 
-module.exports = { registerUser, loginUser, updateUserProfile };
+
+
+  
+module.exports = { registerUser, loginUser, loginUserWithFingerprint, updateUserProfile, addMockUsers };
+  
+
