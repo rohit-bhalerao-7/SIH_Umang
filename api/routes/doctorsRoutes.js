@@ -7,12 +7,12 @@ const mockDoctors = require('../../data/mockdoctors');
 router.post('/', doctorsController.addDoctor);
 
 // Update doctor information
-router.put('/doctors/:doctor_id', doctorsController.updateDoctorInformation);
+//router.put('/doctors/:doctor_id', doctorsController.updateDoctorInformation);
 
 // Get details of a specific doctor
-router.get('/doctors/:doctor_id', doctorsController.getDoctorDetails);
+router.get('/:doctor_id', doctorsController.getDoctorDetails);
 
-router.get('/doctors/:specialization', (req, res) => {
+router.get('/:specialization', (req, res) => {
     const { specialization } = req.params;
     
     // Filter doctors by specialization

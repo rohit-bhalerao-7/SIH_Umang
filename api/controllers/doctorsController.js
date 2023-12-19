@@ -45,4 +45,31 @@ const getDoctorsBySpecialization = (specialization) => {
     return mockDoctors.filter(doctor => doctor.specialization === specialization);
   };
 
+  const Doctor = require('../models/doctorModel'); // Import the Doctor model
+
+  const addMockDoctors = async (req, res) => {
+      try {
+          const mockDoctors = [
+              {
+                  name: "Dr. Ramesh Sharma",
+                  specialization: "Cardiologist",
+                  availability: "Monday, Wednesday, Friday",
+                  contact_info: "123-456-7890",
+                  qualification: "MD, Cardiology"
+              },
+              // Add more mock doctors as needed
+          ];
+  
+          const createdDoctors = await Doctor.bulkCreate(mockDoctors, { validate: true });
+  
+          res.status(201).json({ message: "Mock doctors added successfully", createdDoctors });
+      } catch (error) {
+          console.error("Validation error:", error.errors); // Log validation errors
+          res.status(500).json({ message: "Error adding mock doctors", error: error.message });
+      }
+  };
+  
+  module.exports = { addMockDoctors };
+  
+
 module.exports = { addDoctor, updateDoctorInformation, getDoctorDetails, getDoctorsBySpecialization };
