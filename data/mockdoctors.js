@@ -13,7 +13,7 @@ const mockDoctors = [
         specialization: "Dermatologist",
         availability: "Tuesday, Thursday, Saturday",
         contact_info: "987-654-3210",
-        qualification: "MD, Dermatology"
+        qualification: "Dermatology"
     },
     {
         id: 3,

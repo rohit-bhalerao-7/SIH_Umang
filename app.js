@@ -4,6 +4,10 @@ const logger = require('./utils/logger');
 const errorHandler = require('./utils/errorHandler');
 const responseFormatter = require('./utils/responseFormatter');
 const loggerMiddleware = require('./middlewares/loggerMiddleware');
+const cors = require('cors');
+app.use(cors({
+    origin: '*'
+}));
 
 // Import routes
 const usersRoutes = require('./api/routes/usersRoutes');

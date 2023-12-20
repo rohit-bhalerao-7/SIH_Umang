@@ -2,8 +2,9 @@ const User = require('../models/userModel'); // Sequelize model for User
 
 const mockUsers = require('../../data/mockUsers');
 const generateAbhaId = require('../../utils/idGenerator');
-const generateFingerprintKey = require('../../utils/fingerprintKey');
-const otpGenerator = require('../../utils/otpGenerator'); // Service for mock OTP
+//const generateFingerprintKey = require('../../utils/fingerprintKey');
+//const otpGenerator = require('../../utils/otpGenerator'); // Service for mock OTP
+
 
 const registerUser = async (req, res) => {
     try {
@@ -17,18 +18,19 @@ const registerUser = async (req, res) => {
             bloodGroup,
             language_preference,
             disability_status,
+            qrCodeKey
         } = req.body;
 
         // Generate a random Abha ID
         const abhaId = generateAbhaId();
         
         // Generate a random fingerprint key
-        const generatedFingerprintKey = generateFingerprintKey();
+       // const generatedFingerprintKey = generateFingerprintKey();
 
         // Generate a random OTP
-        const generatedOtp = otpGenerator();
+        // const generatedOtp = otpGenerator();
 
-        // Create a new user with the details, including the generated OTP
+        // Create a new user with the details, including the generated OTP and QR code key
         const user = await User.create({
             mobileNumber,
             name,
@@ -40,8 +42,7 @@ const registerUser = async (req, res) => {
             language_preference,
             disability_status,
             abhaId,
-            fingerprintKey: generatedFingerprintKey,
-            otp: generatedOtp // Include the generated OTP
+            qrCodeKey // Assign generated QR code key
         });
 
         res.status(201).json({ message: "User registered successfully", user });
@@ -51,29 +52,22 @@ const registerUser = async (req, res) => {
 };
 
 
-const loginUser = async (req, res) => {
+const loginUserWithQR = async (req, res) => {
     try {
-        const { mobileNumber, enteredOtp } = req.body;
+        const { qrCodeKey } = req.body; // The key extracted from the QR code
 
-        // Find the user by mobile number
-        const user = await User.findOne({ where: { mobileNumber } });
+        // Find the user by QR code key
+        const user = await User.findOne({ where: { qrCodeKey } });
 
-        if (!user) {
-            return res.status(401).json({ message: "User not found" });
+        if (user) {
+            // Simulate successful QR code authentication
+            // In a real scenario, you might start a session or similar
+            res.json({ message: "Login successful", userProfile: user });
+        } else {
+            res.status(401).json({ message: "QR code authentication failed" });
         }
-
-        // Get the OTP stored in the database for the user
-        const storedOtp = user.otp;
-
-        // Validate the entered OTP against the stored OTP
-        if (enteredOtp !== storedOtp) {
-            return res.status(401).json({ message: "Invalid OTP" });
-        }
-
-        // OTP is valid, proceed to login the user
-        res.json({ message: "Login successful", user });
     } catch (error) {
-        res.status(500).json({ message: "Error logging in", error: error.message });
+        res.status(500).json({ message: "Error during QR code login", error: error.message });
     }
 };
 
@@ -98,8 +92,6 @@ const loginUserWithFingerprint = async (req, res) => {
     }
 };
 
-// const updateUserProfile = async (req, res) => {
-//     try {
 //         const { userId } = req.params;
 //         const { height, weight } = req.body;
 
@@ -131,7 +123,7 @@ const loginUserWithFingerprint = async (req, res) => {
 
 const addMockUsers = async (req, res) => {
     try {
-        const createdUsers = await User.bulkCreate(mockUsers, { validate: true });
+        const createdUsers = await User.bulkCreate(mockUsers);
 
         res.status(201).json({ message: "Mock users added successfully", createdUsers });
     } catch (error) {
@@ -140,10 +132,27 @@ const addMockUsers = async (req, res) => {
     }
 };
 
+const getUserByAbhaId = async (req, res) => {
+    try {
+        const { abhaId } = req.params;
+
+        // Find the user by Abha ID
+        const user = await User.findOne({ where: { abhaId } });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json({ message: "User found by Abha ID", user });
+    } catch (error) {
+        res.status(500).json({ message: "Error getting user by Abha ID", error: error.message });
+    }
+};
+
 
 
 
   
-module.exports = { registerUser, loginUser, loginUserWithFingerprint, updateUserProfile, addMockUsers };
+module.exports = { registerUser, loginUserWithQR, loginUserWithFingerprint, addMockUsers, getUserByAbhaId };
   
 

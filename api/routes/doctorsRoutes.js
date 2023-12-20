@@ -4,7 +4,7 @@ const doctorsController = require('../controllers/doctorsController');
 const mockDoctors = require('../../data/mockdoctors');
 
 // Add a doctor
-router.post('/', doctorsController.addDoctor);
+router.post('/post', doctorsController.addDoctor);
 
 // Update doctor information
 //router.put('/doctors/:doctor_id', doctorsController.updateDoctorInformation);
@@ -12,8 +12,8 @@ router.post('/', doctorsController.addDoctor);
 // Get details of a specific doctor
 router.get('/:doctor_id', doctorsController.getDoctorDetails);
 
-router.get('/:specialization', (req, res) => {
-    const { specialization } = req.params;
+router.post('/get', (req, res) => {
+    const specialization = req.query.specialization;
     
     // Filter doctors by specialization
     const doctorsBySpecialization = mockDoctors.filter(doctor => doctor.specialization === specialization);

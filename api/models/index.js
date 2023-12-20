@@ -30,22 +30,22 @@ ConsultationModel.belongsTo(UserModel, {
     as: 'user'
 });
 
-// Consultation and Prescription (One-to-One)
-ConsultationModel.hasOne(PrescriptionModel, {
-    foreignKey: 'consultation_id',
-    as: 'prescription'
-});
-PrescriptionModel.belongsTo(ConsultationModel, {
-    foreignKey: 'consultation_id',
-    as: 'consultation'
-});
+// // Consultation and Prescription (One-to-One)
+// ConsultationModel.hasOne(PrescriptionModel, {
+//     foreignKey: 'consultation_id',
+//     as: 'prescription'
+// });
+// PrescriptionModel.belongsTo(ConsultationModel, {
+//     foreignKey: 'consultation_id',
+//     as: 'consultation'
+// });
 
 // Doctor and Consultation (One-to-Many)
-DoctorModel.hasMany(ConsultationModel, {
+DoctorModel.hasMany(PrescriptionModel, {
     foreignKey: 'doctor_id',
     as: 'consultations'
 });
-ConsultationModel.belongsTo(DoctorModel, {
+PrescriptionModel.belongsTo(DoctorModel, {
     foreignKey: 'doctor_id',
     as: 'doctor'
 });

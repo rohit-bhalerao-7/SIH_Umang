@@ -7,8 +7,9 @@ router.post('/register', usersController.registerUser);
 router.post('/addMockUsers', usersController.addMockUsers);
 
 // User login
-router.post('/login', usersController.loginUser);
-router.post('/loginwithfingerprint', usersController.loginUserWithFingerprint);
+router.post('/login', usersController.loginUserWithQR);
+//router.post('/loginwithfingerprint', usersController.loginUserWithFingerprint);
+router.get('/getByAbhaId/:abhaId', usersController.getUserByAbhaId);
 
 // Update user profile
 //router.put('/:userId', usersController.updateUserProfile);
